@@ -5,6 +5,7 @@ import { Sparkles } from "lucide-react";
 import { Button } from "../ui/button";
 // import { ClipLoader } from "react-spinners";
 import { useState } from "react";
+import { signIn } from "next-auth/react";
 // import { signIn } from "next-auth/react";
 
 const Hero = () => {
@@ -14,7 +15,7 @@ const Hero = () => {
     if (googleLoading) return;
     setGoogleLoading(true);
     try {
-      //   await signIn("google");
+      await signIn("google");
     } catch (err) {
       console.error("Google sign-in error:", err);
       setGoogleLoading(false);
@@ -25,7 +26,7 @@ const Hero = () => {
     if (guestLoading) return;
     setGuestLoading(true);
     try {
-      //   await signIn("guest");
+      await signIn("guest");
     } catch (err) {
       console.error("Guest sign-in error:", err);
       setGuestLoading(false);
