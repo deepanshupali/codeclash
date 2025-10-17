@@ -77,6 +77,9 @@ model Room {
   questionId  String?     
   question    Question?    @relation("QuestionRooms", fields: [questionId], references: [id])
 
+  challengeStarted    Boolean       @default(false)       
+  challengeStartTime  DateTime?                            
+
   createdAt DateTime     @default(now())
   updatedAt DateTime     @updatedAt
   memberships Membership[]

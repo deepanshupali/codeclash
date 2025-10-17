@@ -26,5 +26,7 @@ export type RoomWithMembers = {
   adminId: string;
   createdAt: Date;
   updatedAt: Date;
+  challengeStarted: boolean; // ✅ NEW
+  challengeStartTime: Date | null; // ✅ NEW
   memberships: MembershipWithUser[];
 };
