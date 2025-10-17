@@ -7,6 +7,8 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import CodeEditor from "./CodeEditor";
+
+import CodeOutput from "./CodeOutput";
 // import { useCodeExecution } from "@/hooks/useCodeExecution";
 // import CodeEditor from "./CodeEditor";
 // import CodeOutput from "./CodeOutput";
@@ -29,7 +31,7 @@ interface ResizableCodeProps {
 
 export function ResizableCode({ question }: ResizableCodeProps) {
   const [code, setCode] = useState<string>(question?.starterCode || "");
-  //   const { status, output, executeCode } = useCodeExecution(question);
+  // const { status, output, executeCode } = useCodeExecution(question);
 
   return (
     <div className="h-[94%]">
@@ -80,8 +82,8 @@ export function ResizableCode({ question }: ResizableCodeProps) {
                     question.difficulty === "easy"
                       ? "bg-green-200 text-green-800 dark:bg-green-900 dark:text-green-300"
                       : question.difficulty === "medium"
-                      ? "bg-yellow-200 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300"
-                      : "bg-red-200 text-red-800 dark:bg-red-900 dark:text-red-300"
+                        ? "bg-yellow-200 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300"
+                        : "bg-red-200 text-red-800 dark:bg-red-900 dark:text-red-300"
                   }`}
                 >
                   {question.difficulty.toUpperCase()}
@@ -150,12 +152,7 @@ export function ResizableCode({ question }: ResizableCodeProps) {
             </ResizablePanel>
             <ResizableHandle />
             <ResizablePanel defaultSize={75}>
-              {/* <CodeOutput
-                status={status}
-                output={output}
-                onRun={() => executeCode(code, false)}
-                onSubmit={() => executeCode(code, true)}
-              /> */}
+              <CodeOutput ans={question?.output || ""} code={code} />
             </ResizablePanel>
           </ResizablePanelGroup>
         </ResizablePanel>
