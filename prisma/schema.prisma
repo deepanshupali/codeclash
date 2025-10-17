@@ -2,6 +2,7 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
+  relationMode = "prisma"
 }
 
 generator client {
@@ -73,11 +74,12 @@ model Room {
   title     String
   adminId   String       @unique   // one user can own only one room
   admin     User         @relation("UserRooms", fields: [adminId], references: [id], onDelete: Cascade)
+  questionId  String?     
+  question    Question?    @relation("QuestionRooms", fields: [questionId], references: [id])
+
   createdAt DateTime     @default(now())
   updatedAt DateTime     @updatedAt
-
   memberships Membership[]
-
 }
 
 model Membership {
@@ -90,3 +92,20 @@ model Membership {
   user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
   room   Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
 }
+
+model Question {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  difficulty  String
+  input       String?
+  output      String?
+  starterCode String?  // ✅ for coding template
+  expectedOutput String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+   // ✅ Back relation
+  rooms          Room[]    @relation("QuestionRooms")
+}
+

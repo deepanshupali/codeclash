@@ -61,7 +61,7 @@ const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async redirect({ url, baseUrl }) {
-      return `${baseUrl}/watchparty`; // 👈 Always redirect to watchparty
+      return `${baseUrl}/lobby`; // 👈 Always redirect to lobby
     },
     async signIn({ user }) {
       if (!user?.id) return true; // guest ya google user
