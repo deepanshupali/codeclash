@@ -1,5 +1,4 @@
 "use client";
-// components/ResizableCode.tsx
 import { useState } from "react";
 import {
   ResizableHandle,
@@ -7,11 +6,10 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import CodeEditor from "./CodeEditor";
-
 import CodeOutput from "./CodeOutput";
-// import { useCodeExecution } from "@/hooks/useCodeExecution";
-// import CodeEditor from "./CodeEditor";
-// import CodeOutput from "./CodeOutput";
+import { Button } from "../ui/button";
+import { Sparkles } from "lucide-react";
+
 export interface Question {
   id: string;
   title: string;
@@ -21,8 +19,8 @@ export interface Question {
   output?: string | null;
   expectedOutput?: string | null;
   starterCode?: string | null;
-  createdAt: Date; // ✅ Fix
-  updatedAt: Date; // ✅ Fix
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 interface ResizableCodeProps {
@@ -31,52 +29,26 @@ interface ResizableCodeProps {
 
 export function ResizableCode({ question }: ResizableCodeProps) {
   const [code, setCode] = useState<string>(question?.starterCode || "");
-  // const { status, output, executeCode } = useCodeExecution(question);
+  const [hint, setHint] = useState<string>("");
+
+  // Placeholder AI hint function
+  const getHint = () => {
+    setHint(
+      "✨ Think about handling edge cases first before coding the solution!"
+    );
+  };
 
   return (
-    <div className="h-[94%]">
+    <div className="h-[90vh]">
       <ResizablePanelGroup direction="horizontal" className="rounded-lg border">
-        {/* <ResizablePanel defaultSize={50}>
-          <div className="flex h-screen items-center justify-center p-6 bg-gray-900">
-            <div className="bg-gray-800 shadow-md rounded-lg p-6 max-w-lg w-full">
-              <h2 className="text-2xl font-bold text-gray-100 mb-4">
-                Question
-              </h2>
-              <div className="bg-gray-700 p-4 rounded-lg border border-gray-600 mb-4">
-                <p className="text-lg font-semibold text-gray-300 mb-2">
-                  Difficulty:{" "}
-                  <span className="font-normal">{question?.difficulty}</span>
-                </p>
-                <p className="text-lg font-semibold text-gray-300 mb-2">
-                  Description:
-                </p>
-                <p className="text-base text-gray-200 mb-4">
-                  {question?.description}
-                </p>
-                <div className="bg-gray-600 p-4 rounded-lg border border-gray-500">
-                  <p className="text-base font-semibold text-gray-300 mb-2">
-                    Example Input:
-                  </p>
-                  <p className="text-base text-gray-200 mb-4">
-                    {question?.input}
-                  </p>
-                  <p className="text-base font-semibold text-gray-300">
-                    Example Output:
-                  </p>
-                  <p className="text-base text-gray-200">{question?.output}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </ResizablePanel> */}
         <ResizablePanel defaultSize={50}>
           <div className="h-screen overflow-y-auto bg-white dark:bg-[#0f0f0f] text-gray-900 dark:text-gray-200 p-6">
             {question ? (
               <div className="max-w-2xl mx-auto">
-                {/* TITLE */}
+                {/* Title */}
                 <h1 className="text-2xl font-bold mb-2">{question.title}</h1>
 
-                {/* DIFFICULTY TAG */}
+                {/* Difficulty */}
                 <span
                   className={`text-sm px-2 py-1 rounded ${
                     question.difficulty === "easy"
@@ -89,46 +61,56 @@ export function ResizableCode({ question }: ResizableCodeProps) {
                   {question.difficulty.toUpperCase()}
                 </span>
 
-                {/* DESCRIPTION */}
-                <div className="mt-4">
-                  <h2 className="text-lg font-semibold mb-1">Description</h2>
-                  <p className="leading-relaxed text-gray-800 dark:text-gray-300">
-                    {question.description}
-                  </p>
+                {/* Get Hint Button */}
+                <div className="mt-6">
+                  <Button
+                    onClick={getHint}
+                    className="relative overflow-hidden group bg-gradient-to-r from-purple-600 via-pink-500 to-indigo-500 text-white shadow-lg hover:shadow-purple-500/50 transition-all duration-500"
+                  >
+                    <span className="absolute inset-0 w-full h-full bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.4),transparent_60%)] opacity-0 group-hover:opacity-100 transition-all duration-300"></span>
+                    <Sparkles className="mr-2 h-4 w-4 animate-pulse" />
+                    Reveal AI Hint
+                  </Button>
                 </div>
 
-                {/* EXAMPLE INPUT/OUTPUT */}
+                {/* AI Hint Reveal */}
+                {hint && (
+                  <div className="mt-4 p-4 rounded-xl bg-gradient-to-r from-purple-900/30 to-indigo-900/30 border border-purple-500/30 text-purple-100 shadow-lg animate-in fade-in slide-in-from-top-2 duration-700">
+                    <p className="text-sm">{hint}</p>
+                  </div>
+                )}
+                {/* Description */}
+                <div className="mt-4">
+                  <h2 className="text-lg font-semibold mb-1">Description</h2>
+                  <p className="leading-relaxed">{question.description}</p>
+                </div>
+
+                {/* Example Input/Output */}
                 {(question.input || question.output) && (
                   <div className="mt-6 bg-gray-100 dark:bg-[#1a1a1a] border border-gray-300 dark:border-gray-700 rounded p-4">
                     <h3 className="font-semibold text-md mb-2">Example</h3>
                     {question.input && (
                       <p className="mb-2">
                         <span className="font-bold">Input:</span>{" "}
-                        <span className="text-gray-700 dark:text-gray-300">
-                          {question.input}
-                        </span>
+                        {question.input}
                       </p>
                     )}
                     {question.output && (
                       <p>
                         <span className="font-bold">Output:</span>{" "}
-                        <span className="text-gray-700 dark:text-gray-300">
-                          {question.output}
-                        </span>
+                        {question.output}
                       </p>
                     )}
                   </div>
                 )}
 
-                {/* EXPECTED OUTPUT */}
+                {/* Expected Output */}
                 {question.expectedOutput && (
                   <div className="mt-4 bg-gray-100 dark:bg-[#1a1a1a] border border-gray-300 dark:border-gray-700 rounded p-4">
                     <h3 className="font-semibold text-md mb-2">
                       Expected Output
                     </h3>
-                    <p className="text-gray-700 dark:text-gray-300">
-                      {question.expectedOutput}
-                    </p>
+                    <p>{question.expectedOutput}</p>
                   </div>
                 )}
               </div>
@@ -141,9 +123,9 @@ export function ResizableCode({ question }: ResizableCodeProps) {
         </ResizablePanel>
 
         <ResizableHandle />
-        <ResizablePanel defaultSize={50}>
+        <ResizablePanel defaultSize={75}>
           <ResizablePanelGroup direction="vertical">
-            <ResizablePanel defaultSize={25}>
+            <ResizablePanel defaultSize={80}>
               <CodeEditor
                 initialCode={question?.starterCode || ""}
                 onCodeChange={setCode}
