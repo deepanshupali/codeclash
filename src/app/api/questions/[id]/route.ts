@@ -3,11 +3,12 @@ import { prisma } from "@/lib/prisma";
 
 export async function GET(
   req: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ roomId: string }> }
 ) {
   try {
+    const roomId = await context.params;
     const room = await prisma.room.findUnique({
-      where: { id: params.id },
+      where: { id: roomId.roomId },
       include: { question: true }, // ✅ includes question data
     });
 
